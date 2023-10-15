@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Constants
+const int NUM_ROWS = 5;
+const int NUM_COLS = 5;
+const double TICKET_PRICE = 10.0;
+
+// Function to display available seats
+void displaySeats(const vector<vector<bool>>& seats) {
+    for (int i = 0; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            cout << (seats[i][j] ? "O" : "X") << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Function to calculate the total cost
+double calculateTotalCost(const vector<vector<bool>>& seats) {
+    int numBookedSeats = 0;
+    for (int i = 0; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            if (!seats[i][j]) {
+                numBookedSeats++;
+            }
+        }
+    }
+    return numBookedSeats * TICKET_PRICE;
+}
+
+int main() {
+    // Initialize the seat matrix
+    vector<vector<bool>> seats(NUM_ROWS, vector<bool>(NUM_COLS, true));
+
+    char choice;
+    do {
+        cout << "Movie Ticket Booking System\n";
+        cout << "1. View available seats\n";
+        cout << "2. Book a seat\n";
+        cout << "3. Calculate total cost\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case '1':
+                displaySeats(seats);
+                break;
+            case '2':
+                int row, col;
+                cout << "Enter row and column to book (1-" << NUM_ROWS << ", 1-" << NUM_COLS << "): ";
+                cin >> row >> col;
+                if (row >= 1 && row <= NUM_ROWS && col >= 1 && col <= NUM_COLS) {
+                    if (seats[row - 1][col - 1]) {
+                        seats[row - 1][col - 1] = false;
+                        cout << "Seat booked successfully!\n";
+                    } else {
+                        cout << "Seat is already booked. Please choose another seat.\n";
+                    }
+                } else {
+                    cout << "Invalid row or column.\n";
+                }
+                break;
+            case '3':
+                cout << "Total cost: $" << calculateTotalCost(seats) << endl;
+                break;
+            case '4':
+                cout << "Goodbye!\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != '4');
+
+    return 0;
+}
